@@ -1,33 +1,8 @@
-//Declare 2 variables that will keep track of the score
-let humanScore = 0;
-let computerScore = 0;
-
-//Write code Logic to get human choice input and output their choice
-function getHumanchoice() {
-    const humanChoice = prompt("Enter rock paper or scissors...").toLowerCase().trim();
-    
-    if(humanChoice == "rock") {
-        console.log("You chose Rock");
-    }
-    else if(humanChoice == "paper") {
-        console.log("You chose Paper");
-    }
-    else if(humanChoice == "scissors") {
-        console.log("You chose Scissors");
-    }
-    else {
-        console.log("Invalid choice,Try Again");
-        return getHumanchoice();
-    }
-    
-    return humanChoice;
-}
-
 //Write code logic to get computer choice randomly
 function getComputerchoice() {
     const randomChoice = Math.floor(Math.random() * 3);
 
-    if(randomChoice== 0) {
+    if(randomChoice == 0) {
         return "rock";
     }
     else if(randomChoice == 1) {
@@ -40,8 +15,21 @@ function getComputerchoice() {
     return randomChoice;
 }
 
+
+//Declare 2 variables that will keep track of the score
+let humanScore = 0;
+let computerScore = 0;
+
+const playerChoiceDisplay = document.getElementById('player-choice');
+const computerChoiceDisplay = document.getElementById('computer-choice');
+const roundWinnerDisplay = document.getElementById('round-winner');
+const playerScoreDisplay = document.getElementById('player-score');
+const computerScoreDisplay = document.getElementById('computer-score');
+
 //Write code logic to play a game for a single round
 function playRound(humanChoice, computerChoice) {
+
+    let roundResult;
     
     switch(humanChoice) {
         //Case when human chooses rock
@@ -49,18 +37,18 @@ function playRound(humanChoice, computerChoice) {
             //Case when computer chooses rock
             switch(computerChoice) {
                 case "rock":
-                    console.log("It's a Tie!");
+                    roundResult = "It's a tie!"
                     break;
                 
                 //Case when computer chooses paper
                 case "paper":
-                    console.log("You lose,Paper beats rock");
+                    roundResult = "You lose,Paper beats rock";
                     ++computerScore;
                     break;
                 
                 //Case when computer chooses scissors
                 case "scissors":
-                    console.log("You win,Rock beats scissors");
+                    roundResult = "You win,Rock beats scissors";
                     ++humanScore;
                     break;
             }
@@ -71,18 +59,18 @@ function playRound(humanChoice, computerChoice) {
             switch(computerChoice) {
                 //Case when computer chooses rock
                 case "rock":
-                    console.log("You win,Paper beats rock");
+                    roundResult = "You win,Paper beats rock";
                     ++humanScore;
                     break;
                 
                 //Case when computer chooses paper
                 case "paper":
-                    console.log("It's a Tie");
+                    roundResult = "It's a Tie";
                     break;
 
                 //Case when computer chooses scissors
                 case "scissors":
-                    console.log("You lose,Scissors beats paper");
+                    roundResult = "You lose,Scissors beats paper";
                     ++computerScore;
                     break;
             }
@@ -93,42 +81,61 @@ function playRound(humanChoice, computerChoice) {
             switch(computerChoice) {
                 //Case when computer chooses rock
                 case "rock":
-                    console.log("You lose,Rock beats scissors");
+                    roundResult = "You lose,Rock beats scissors";
                     ++computerScore;
                     break;
-                
+                    
                 //Case when computer chooses paper
                 case "paper":
-                    console.log("You win,Scissors beats paper");
+                    roundResult = "You win,Scissors beats paper";
                     ++humanScore;
                     break;
 
                 case "scissors":
-                    console.log("It's a tie!");
+                    roundResult = "It's a tie!";
                     break;
             }
             break;
     }
+    
+    // after your switch logic
+playerChoiceDisplay.textContent = humanChoice;
+computerChoiceDisplay.textContent = computerChoice;
+roundWinnerDisplay.textContent = roundResult;
+playerScoreDisplay.textContent = humanScore;
+computerScoreDisplay.textContent = computerScore;
+
+if(humanScore === 5) {
+    alert("You won the game!")
+    humanScore = 0;
+    computerScore = 0;
+    //Reset the UI scores
+    playerScoreDisplay.textContent = humanScore;
+    computerScoreDisplay.textContent = computerScore;
+}
+if(computerScore === 5) {
+    alert("Computer Won the game!")
+    humanScore = 0;
+    computerScore = 0;
+    //Reset the UI scores
+    playerScoreDisplay.textContent = humanScore;
+    computerScoreDisplay.textContent = computerScore;
 }
 
-function playGame() {
-    for(let i = 0; i < 5; i++) {
-        const humanSelection = getHumanchoice();
-        const computerSelection = getComputerchoice();
-        playRound(humanSelection, computerSelection);
-        console.log("Computer chose:",computerSelection);
-    }
 
-    if(humanScore > computerScore) {
-        console.log("\nCongrats,You win!");
-    }
-    else if(computerScore > humanScore) {
-        console.log("\nComputer Wins!")
-    }
-    
-    
-    console.log("Your Score is: ",humanScore);
-    console.log("Computer's score is: ",computerScore);
 }
 
-playGame();
+
+
+
+//UI Interactivity
+const btn = document.querySelectorAll('button');
+
+btn.forEach((button) => {
+    button.addEventListener('click', () => {
+        const humanChoice = button.id;
+        const computerChoice = getComputerchoice();
+        playRound(humanChoice, computerChoice);
+    });
+});
+
